@@ -6,8 +6,9 @@ import labs.Lab_3;
 import labs.Lab_4;
 import labs.Lab_5;
 import labs.Lab_6;
+import labs.Lab_7;
 import labs.Lab_8;
-import labs.Lab_9;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -34,12 +35,13 @@ public class Main {
             case 6:
                 Lab_6.lab_6();
                 break;
+            case 7:
+                Lab_7.lab_7();
+                break;
             case 8:
                 Lab_8.lab_8();
                 break;
-            case 9:
-                Lab_9.lab_9();
-                break;
+
 
         }
     }

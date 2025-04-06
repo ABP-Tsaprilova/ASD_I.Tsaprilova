@@ -20,22 +20,22 @@ public class Lab_8 {
             List<Integer> listA = toList(arrayA);
             List<Integer> listB = toList(arrayB);
 
-            // Елементи, які присутні в декількох екземплярах в arrayA
+
             List<Integer> multiplesA = findMultiples(arrayA);
             result.addAll(multiplesA);
 
-            // Елементи, які присутні в декількох екземплярах в arrayB
+
             List<Integer> multiplesB = findMultiples(arrayB);
             result.addAll(multiplesB);
 
-            // Елементи, які присутні тільки в arrayA
+
             for (int num : arrayA) {
                 if (!listB.contains(num) && !multiplesA.contains(num) && !multiplesB.contains(num)) {
                     result.add(num);
                 }
             }
 
-            // Елементи, які присутні тільки в arrayB
+
             for (int num : arrayB) {
                 if (!listA.contains(num) && !multiplesA.contains(num) && !multiplesB.contains(num)) {
                     result.add(num);
@@ -106,7 +106,7 @@ public class Lab_8 {
             Random random = new Random();
 
             for (int i = 0; i < size; i++) {
-                array[i] = random.nextInt(100); // Генеруємо числа від 0 до 99
+                array[i] = random.nextInt(100);
             }
             return array;
         }
