@@ -9,6 +9,8 @@ import labs.Lab_6;
 import labs.Lab_7;
 import labs.Lab_8;
 import labs.Lab_9;
+import labs.Lab_10;
+
 
 
 public class Main {
@@ -44,6 +46,9 @@ public class Main {
                 break;
             case 9:
                 Lab_9.lab_9();
+                break;
+            case 10:
+                Lab_10.lab_10();
                 break;
 
 
