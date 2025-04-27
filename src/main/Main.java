@@ -10,6 +10,7 @@ import labs.Lab_7;
 import labs.Lab_8;
 import labs.Lab_9;
 import labs.Lab_10;
+import labs.Lab_11;
 
 
 
@@ -49,6 +50,9 @@ public class Main {
                 break;
             case 10:
                 Lab_10.lab_10();
+                break;
+            case 11:
+                Lab_11.lab_11();
                 break;
 
 

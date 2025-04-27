@@ -2,163 +2,186 @@ package labs;
 import java.util.*;
 
 public class Lab_10 {
-    public static void lab_10() {
+    public static Map<Integer, Integer> dijkstra(int graph[][], int startNode) {
+        int numNodes = graph.length;
+        int[] shortestDistances = new int[numNodes];
+        boolean[] added = new boolean[numNodes];
+        Map<Integer, Integer> parentMap = new HashMap<>();
 
-        class ShortestPathFinder {
+        for (int i = 0; i < numNodes; i++) {
+            shortestDistances[i] = Integer.MAX_VALUE;
+            added[i] = false;
+            parentMap.put(i, null);
+        }
 
-            private static final int INF = Integer.MAX_VALUE;
+        shortestDistances[startNode] = 0;
 
-            public static void lab10_() {
-                // Представляємо граф як матрицю суміжності (ваги ребер)
-                int[][] graph = {
-                        {0, 8, INF, INF, 7, INF, INF, INF},   // 0
-                        {INF, 0, 3, INF, 5, INF, INF, INF},   // 1
-                        {INF, INF, 0, 9, 2, INF, INF, INF},   // 2
-                        {INF, INF, INF, 0, INF, 11, INF, INF},  // 3
-                        {INF, INF, INF, INF, 0, 6, INF, INF},   // 4
-                        {INF, INF, INF, INF, INF, 0, 13, 3},  // 5
-                        {INF, INF, INF, INF, INF, INF, 0, 10},  // 6
-                        {INF, INF, INF, INF, INF, INF, INF, 0}    // 7
-                };
+        for (int i = 1; i < numNodes; i++) {
+            int nearestNode = -1;
+            int shortestDistance = Integer.MAX_VALUE;
 
-                Scanner scanner = new Scanner(System.in);
-
-                System.out.println("Виберіть початкову вершину (0-7):");
-                int startNode = scanner.nextInt();
-
-                System.out.println("Виберіть кінцеву вершину (0-7):");
-                int endNode = scanner.nextInt();
-
-                System.out.println("\nРезультати:");
-
-                // Алгоритм Дейкстри
-                dijkstra(graph, startNode, endNode);
-
-                // Алгоритм Флойда-Воршалла
-                floydWarshall(graph, startNode, endNode);
-
-                scanner.close();
-            }
-
-            public static void dijkstra(int[][] graph, int startNode, int endNode) {
-                int numNodes = graph.length;
-                int[] distances = new int[numNodes];
-                boolean[] visited = new boolean[numNodes];
-                int[] parent = new int[numNodes];
-
-                Arrays.fill(distances, INF);
-                Arrays.fill(visited, false);
-                distances[startNode] = 0;
-                Arrays.fill(parent, -1);
-
-                for (int i = 0; i < numNodes - 1; i++) {
-                    int u = findMinDistance(distances, visited);
-                    if (u == -1) {
-                        break;
-                    }
-                    visited[u] = true;
-
-                    for (int v = 0; v < numNodes; v++) {
-                        if (!visited[v] && graph[u][v] != INF && distances[u] != INF && distances[u] + graph[u][v] < distances[v]) {
-                            distances[v] = distances[u] + graph[u][v];
-                            parent[v] = u;
-                        }
-                    }
-                }
-
-                System.out.println("\nАлгоритм Дейкстри:");
-                if (distances[endNode] == INF) {
-                    System.out.println("Шлях від " + startNode + " до " + endNode + " не знайдено.");
-                } else {
-                    System.out.println("Найкоротша відстань від " + startNode + " до " + endNode + ": " + distances[endNode]);
-                    System.out.print("Шлях: ");
-                    printPath(parent, endNode);
-                    System.out.println();
+            for (int j = 0; j < numNodes; j++) {
+                if (!added[j] && shortestDistances[j] < shortestDistance) {
+                    nearestNode = j;
+                    shortestDistance = shortestDistances[j];
                 }
             }
 
-            private static int findMinDistance(int[] distances, boolean[] visited) {
-                int minDistance = INF;
-                int minIndex = -1;
-                for (int v = 0; v < distances.length; v++) {
-                    if (!visited[v] && distances[v] < minDistance) {
-                        minDistance = distances[v];
-                        minIndex = v;
-                    }
-                }
-                return minIndex;
+            if (nearestNode == -1) {
+                break;
             }
 
-            private static void printPath(int[] parent, int j) {
-                if (parent[j] == -1) {
-                    System.out.print(j + " ");
-                    return;
-                }
-                printPath(parent, parent[j]);
-                System.out.print(j + " ");
-            }
+            added[nearestNode] = true;
 
-            public static void floydWarshall(int[][] graph, int startNode, int endNode) {
-                int numNodes = graph.length;
-                int[][] distances = new int[numNodes][numNodes];
-                int[][] next = new int[numNodes][numNodes];
-
-                // Ініціалізація матриць відстаней та наступних вершин
-                for (int i = 0; i < numNodes; i++) {
-                    for (int j = 0; j < numNodes; j++) {
-                        distances[i][j] = graph[i][j];
-                        if (i == j) {
-                            next[i][j] = -1;
-                        } else if (graph[i][j] != INF) {
-                            next[i][j] = j;
-                        } else {
-                            next[i][j] = -1;
-                        }
+            for (int neighborNode = 0; neighborNode < numNodes; neighborNode++) {
+                if (!added[neighborNode] && graph[nearestNode][neighborNode] != 0) {
+                    int newDistance = shortestDistances[nearestNode] + graph[nearestNode][neighborNode];
+                    if (newDistance < shortestDistances[neighborNode]) {
+                        shortestDistances[neighborNode] = newDistance;
+                        parentMap.put(neighborNode, nearestNode);
                     }
-                }
-
-                // Алгоритм Флойда-Воршалла
-                for (int k = 0; k < numNodes; k++) {
-                    for (int i = 0; i < numNodes; i++) {
-                        for (int j = 0; j < numNodes; j++) {
-                            if (distances[i][k] != INF && distances[k][j] != INF &&
-                                    distances[i][j] > distances[i][k] + distances[k][j]) {
-                                distances[i][j] = distances[i][k] + distances[k][j];
-                                next[i][j] = next[i][k];
-                            }
-                        }
-                    }
-                }
-
-                System.out.println("\nАлгоритм Флойда-Воршалла:");
-                if (distances[startNode][endNode] == INF) {
-                    System.out.println("Шлях від " + startNode + " до " + endNode + " не знайдено.");
-                } else {
-                    System.out.println("Найкоротша відстань від " + startNode + " до " + endNode + ": " +
-                            distances[startNode][endNode]);
-                    System.out.print("Шлях: ");
-                    printFloydWarshallPath(next, startNode, endNode);
-                    System.out.println();
-                }
-            }
-
-            private static void printFloydWarshallPath(int[][] next, int i, int j) {
-                if (i == j) {
-                    System.out.print(i + " ");
-                    return;
-                }
-                if (next[i][j] == -1) {
-                    System.out.print("Шлях не існує");
-                    return;
-                }
-                System.out.print(i + " ");
-                while (i != j) {
-                    i = next[i][j];
-                    System.out.print(i + " ");
                 }
             }
         }
 
-        ShortestPathFinder.lab10_();
+        return parentMap;
     }
+
+    // Відтворення шляху (перенесено з попереднього коду)
+    public static List<Integer> getPath(Map<Integer, Integer> parentMap, int targetNode) {
+        List<Integer> path = new ArrayList<>();
+        Integer currentNode = targetNode;
+        while (currentNode != null) {
+            path.add(currentNode);
+            currentNode = parentMap.get(currentNode);
+        }
+        Collections.reverse(path);
+        return path;
+    }
+
+    // Алгоритм Флойда-Воршелла (перенесено з попереднього коду)
+    public static int[][] floydWarshall(int graph[][]) {
+        int numNodes = graph.length;
+        int[][] distanceMatrix = new int[numNodes][numNodes];
+
+        for (int i = 0; i < numNodes; i++) {
+            for (int j = 0; j < numNodes; j++) {
+                if (i == j) {
+                    distanceMatrix[i][j] = 0;
+                } else if (graph[i][j] != 0) {
+                    distanceMatrix[i][j] = graph[i][j];
+                } else {
+                    distanceMatrix[i][j] = Integer.MAX_VALUE / 2;
+                }
+            }
+        }
+
+        for (int k = 0; k < numNodes; k++) {
+            for (int i = 0; i < numNodes; i++) {
+                for (int j = 0; j < numNodes; j++) {
+                    distanceMatrix[i][j] = Math.min(distanceMatrix[i][j], distanceMatrix[i][k] + distanceMatrix[k][j]);
+                }
+            }
+        }
+
+        return distanceMatrix;
+    }
+
+    // Допоміжна функція для обчислення довжини шляху (перенесено з попереднього коду)
+    private static int getShortestDistance(int[][] graph, List<Integer> path) {
+        int distance = 0;
+        for (int i = 0; i < path.size() - 1; i++) {
+            distance += graph[path.get(i)][path.get(i + 1)];
+        }
+        return distance;
+    }
+
+    public static void lab_10() {
+        Scanner scanner = new Scanner(System.in);
+
+        // Представлення графу (заповніть відповідно до вашого графу)
+        int[][] graph = new int[][]{
+                {0, 2, 3, 5, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 6, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 3, 0, 6, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 1, 8, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
+        int numNodes = graph.length;
+
+        while (true) {
+            System.out.println("\nМеню пошуку найкоротшого шляху:");
+            System.out.println("1. Алгоритм Дейкстри");
+            System.out.println("2. Алгоритм Флойда-Воршелла (вивести відстань)");
+            System.out.println("0. Вихід");
+            System.out.print("Виберіть опцію: ");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Введіть початкову вершину (1-" + numNodes + "): ");
+                    int startDijkstra = scanner.nextInt() - 1;
+                    System.out.print("Введіть кінцеву вершину (1-" + numNodes + "): ");
+                    int endDijkstra = scanner.nextInt() - 1;
+
+                    if (startDijkstra >= 0 && startDijkstra < numNodes && endDijkstra >= 0 && endDijkstra < numNodes) {
+                        Map<Integer, Integer> parentMapDijkstra = dijkstra(graph, startDijkstra);
+                        List<Integer> pathDijkstra = getPath(parentMapDijkstra, endDijkstra);
+                        int distanceDijkstra = (parentMapDijkstra.containsKey(endDijkstra) && pathDijkstra.get(pathDijkstra.size() - 1) == endDijkstra)
+                                ? getShortestDistance(graph, pathDijkstra)
+                                : Integer.MAX_VALUE;
+
+                        if (distanceDijkstra == Integer.MAX_VALUE) {
+                            System.out.println("Шлях від вершини " + (startDijkstra + 1) + " до вершини " + (endDijkstra + 1) + " не знайдено.");
+                        } else {
+                            System.out.println("Найкоротший шлях від вершини " + (startDijkstra + 1) + " до вершини " + (endDijkstra + 1) + ": " + pathDijkstra);
+                            System.out.println("Довжина найкоротшого шляху: " + distanceDijkstra);
+                        }
+                    } else {
+                        System.out.println("Некоректний ввід вершин.");
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Введіть початкову вершину (1-" + numNodes + "): ");
+                    int startFloyd = scanner.nextInt() - 1;
+                    System.out.print("Введіть кінцеву вершину (1-" + numNodes + "): ");
+                    int endFloyd = scanner.nextInt() - 1;
+
+                    if (startFloyd >= 0 && startFloyd < numNodes && endFloyd >= 0 && endFloyd < numNodes) {
+                        int[][] distanceMatrixFloyd = floydWarshall(graph);
+                        if (distanceMatrixFloyd[startFloyd][endFloyd] >= Integer.MAX_VALUE / 2) {
+                            System.out.println("Шлях від вершини " + (startFloyd + 1) + " до вершини " + (endFloyd + 1) + " не знайдено.");
+                        } else {
+                            System.out.println("Найкоротша відстань від вершини " + (startFloyd + 1) + " до вершини " + (endFloyd + 1) + ": " + distanceMatrixFloyd[startFloyd][endFloyd]);
+                            // Для відтворення шляху Флойда-Воршелла потрібна додаткова матриця попередників
+                        }
+                    } else {
+                        System.out.println("Некоректний ввід вершин.");
+                    }
+                    break;
+
+                case 0:
+                    System.out.println("Вихід з програми.");
+                    scanner.close();
+                    return;
+
+                default:
+                    System.out.println("Некоректний вибір. Спробуйте ще раз.");
+            }
+        }
+    }
+
 }
+
