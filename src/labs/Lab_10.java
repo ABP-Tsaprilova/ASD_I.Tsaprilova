@@ -47,7 +47,6 @@ public class Lab_10 {
         return parentMap;
     }
 
-    // Відтворення шляху (перенесено з попереднього коду)
     public static List<Integer> getPath(Map<Integer, Integer> parentMap, int targetNode) {
         List<Integer> path = new ArrayList<>();
         Integer currentNode = targetNode;
@@ -59,7 +58,6 @@ public class Lab_10 {
         return path;
     }
 
-    // Алгоритм Флойда-Воршелла (перенесено з попереднього коду)
     public static int[][] floydWarshall(int graph[][]) {
         int numNodes = graph.length;
         int[][] distanceMatrix = new int[numNodes][numNodes];
@@ -87,7 +85,6 @@ public class Lab_10 {
         return distanceMatrix;
     }
 
-    // Допоміжна функція для обчислення довжини шляху (перенесено з попереднього коду)
     private static int getShortestDistance(int[][] graph, List<Integer> path) {
         int distance = 0;
         for (int i = 0; i < path.size() - 1; i++) {
@@ -99,7 +96,6 @@ public class Lab_10 {
     public static void lab_10() {
         Scanner scanner = new Scanner(System.in);
 
-        // Представлення графу (заповніть відповідно до вашого графу)
         int[][] graph = new int[][]{
                 {0, 2, 3, 5, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},

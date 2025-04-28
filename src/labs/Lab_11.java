@@ -35,7 +35,7 @@ public class Lab_11 {
                 new Edge(6, 8, 8)
         );
 
-        // Створення списку суміжності для алгоритму Прима
+
         List<List<Edge>> adj = new ArrayList<>(vertices + 1);
         for (int i = 0; i <= vertices; i++) {
             adj.add(new ArrayList<>());

@@ -3,7 +3,6 @@ import java.util.*;
 
 public class Lab_9 {
     public static void lab_9() {
-        // Представляємо граф як матрицю суміжності
         int[][] graph = {
                 {0, 1, 1, Integer.MAX_VALUE, 1, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, // a
                 {1, 0, Integer.MAX_VALUE, 1, 1, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}, // b
@@ -60,7 +59,6 @@ public class Lab_9 {
         boolean[] visited = new boolean[vertexCount];
         int[] parent = new int[vertexCount];
 
-        // Ініціалізація відстаней та visited
         Arrays.fill(distances, Integer.MAX_VALUE);
         Arrays.fill(visited, false);
         distances[startVertex] = 0;
@@ -68,7 +66,7 @@ public class Lab_9 {
 
         for (int i = 0; i < vertexCount - 1; i++) {
             int u = findMinDistanceVertex(distances, visited);
-            if (u == -1) break; // Якщо всі досяжні вершини вже відвідані
+            if (u == -1) break;
 
             visited[u] = true;
 
@@ -118,14 +116,13 @@ public class Lab_9 {
         int vertexCount = graph.length;
         int[][] distances = new int[vertexCount][vertexCount];
 
-        // Ініціалізація матриці відстаней
         for (int i = 0; i < vertexCount; i++) {
             for (int j = 0; j < vertexCount; j++) {
                 distances[i][j] = graph[i][j];
             }
         }
 
-        // Алгоритм Флойда-Воршалла
+
         for (int k = 0; k < vertexCount; k++) {
             for (int i = 0; i < vertexCount; i++) {
                 for (int j = 0; j < vertexCount; j++) {
